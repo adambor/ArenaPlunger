@@ -1,0 +1,49 @@
+## This should be placed in the plugin directory
+## for more help configuring see the wiki
+## https://github.com/alkarinv/BattleArena/wiki
+## Change this file to customize your event
+
+ArenaPlunger:
+    enabled: true
+    joinType: JoinPhase
+    database: ArenaPlunger # or delete if you dont want wins/losses/top, needs BattleTracker
+    rated: false # if database is enabled
+    prefix: "&f[ArenaPlunger]&e"
+    cmd: ap
+    nLives: infinite
+    nTeams: 2
+    matchTime: 600 ## How long do timed matches last, (in seconds)
+    matchUpdateInterval: 30 ## For timed matched, how long between sending players match updates
+    ### You can delete any stages/transitions that have no options
+    ### for a list of options see wiki
+    preReqs: ## Prerequisites for joining
+        options: []
+    onJoin:
+        options: [alwaysJoin, alwaysTeamNames, alwaysWoolTeams, armorTeams]
+    onEnter:  ## when they join the match
+        options: [storeAll]
+    onLeave:  ## when they leave the match
+        options: [restoreAll]
+    onCancel:  ## when they leave the match
+        options: [restoreAll]
+    onPreStart: ## x seconds before onStart
+        options: []
+    onStart: ## Starting
+        options: [teleportIn, pvpOn, blockBreakOff]
+    onSpawn: ## what happens when a player spawns
+        options: [hunger=20, health=20]
+    onDeath: ## what happens when a player dies
+        options: []
+    onComplete: ## what happens when things end
+        options: [teleportOut, pvpOn, blockBreakOn]
+    victoryCondition: Custom
+    winner: ## what to give the winner
+        options: [money=10, experience=30, health=20, hunger=20, giveItems]
+        items:
+          - diamond: 1
+          - emerald: 1
+    losers: ## what to give the losers
+        options: [health=20, hunger=20, giveItems]
+        items:
+          - emerald: 1
+            

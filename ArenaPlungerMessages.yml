@@ -1,0 +1,11 @@
+version: 1.2
+
+
+ArenaPlunger:
+
+  plunger_dropped: "&2Player %p has dropped the &6Plunger"
+
+  plunger_picked: "&2Player %p has picked up the &6Plunger"
+  plunger_broken: "&2Plunger is respawning because it is broken"
+  ### Use %p to replace with player name
+  ### Use %t to replace with player team

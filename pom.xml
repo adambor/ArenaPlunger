@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>mc.alk</groupId>
+    <artifactId>ArenaPlunger</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1.0</version>
+    <name>ArenaPlunger</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <url>http://maven.apache.org</url>
+    <!-- Locations for jar repositories -->
+    <repositories>
+        <repository>
+            <id>battleplugins-repo</id>
+            <url>http://server.battleplugins.com/maven/repository/</url>
+        </repository>
+         <repository>
+             <id>rainbowcraft-repo</id>
+             <url>http://rainbowcraft.sytes.net/maven/repository/</url>
+        </repository>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+    </repositories>
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- Dependencies that have maven repos -->
+        <dependency>
+             <groupId>org.bukkit</groupId>
+             <artifactId>bukkit</artifactId>
+             <version>1.7.5-R0.1-SNAPSHOT</version>
+             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mc.alk</groupId>
+            <artifactId>BattleArena</artifactId>
+            <version>3.9.9.14</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- unknown plugins that I had to add to the repo -->
+        <!-- test dependencies -->
+    </dependencies>
+    <!-- How we will compile the plugin -->
+    <build>
+        <finalName>${project.name}</finalName>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.4</version>
+            </extension>
+        </extensions>
+        <defaultGoal>install</defaultGoal>
+        <!-- Where our source directory is -->
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <!-- Include all the resources we need -->
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- Specify how we build the plugin.jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <distributionManagement>
+        <repository>
+            <id>rainbowcraft-repo</id>
+            <url>scp://23.29.127.102/var/www/maven/repository</url>
+        </repository>
+    </distributionManagement>
+</project>

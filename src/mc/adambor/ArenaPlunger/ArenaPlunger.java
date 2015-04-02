@@ -33,21 +33,22 @@ import mc.alk.scoreboardapi.scoreboard.SAPIDisplaySlot;
 
 public class ArenaPlunger extends Arena {
 	@Persist
-    Location plungerloc;
+        Location plungerloc;
 	Item plunger;
 	MatchMessageHandler mmh;
 	ItemStack plungeritem;
-	BukkitTask timerid;
+	BukkitTask timerid1;
+	BukkitTask timerid2;
 	SScoreboard scoreb;
-    SObjective objective;
-    ArenaPlayer plungerholding;
-    HashMap<ArenaTeam,SEntry> entry = new HashMap<ArenaTeam,SEntry>();
-    SEntry holdingentry;
-    Random rand = new Random();
+        SObjective objective;
+        ArenaPlayer plungerholding;
+        HashMap<ArenaTeam,SEntry> entry = new HashMap<ArenaTeam,SEntry>();
+        SEntry holdingentry;
+        Random rand = new Random();
     
 	public void onOpen(){
 		mmh = match.getMessageHandler();
-	}
+   }
 	public void onStart(){
 		scoreb = match.getScoreboard();
 		objective = scoreb.registerNewObjective("ap", "ArenaPlunger", ChatColor.GOLD+"Plunger", SAPIDisplaySlot.SIDEBAR);
@@ -66,7 +67,7 @@ public class ArenaPlunger extends Arena {
 		plunger = plungerloc.getWorld().dropItem(plungerloc, plungeritem);
 		plunger.setCustomName(ChatColor.GOLD+"Plunger");
 		plunger.setCustomNameVisible(true);
-		timerid = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable(){
+		timerid1 = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable(){
 			@Override
 			public void run() {
 				if(plungerholding != null){
@@ -77,6 +78,12 @@ public class ArenaPlunger extends Arena {
 				}
 			}
 		}, 0, 20L);
+		timerid2 = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable(){
+			@Override
+			public void run() {
+                                updateCompassLocation();
+			}
+		}, 0, 60L);
 	}
 	public void flames(Location location) {
 		for(int x=0;x<11;x++){
@@ -85,12 +92,29 @@ public class ArenaPlunger extends Arena {
 		}
 	}
 	public void onCancel(){
-		timerid.cancel();
+		timerid1.cancel();
+		timerid2.cancel();
 		plunger.remove();
 	}
 	public void onVictory(){
-		timerid.cancel();
+		timerid1.cancel();
+		timerid2.cancel();
 		plunger.remove();
+	}
+	public void updateCompassLocation(){
+		Location loc = null;
+		if(plunger != null){
+			loc = plunger.getLocation();
+		} else {
+			if(plungerholding != null){
+				loc = plungerholding.getLocation();
+			}
+		}
+		for(ArenaTeam team : match.getTeams()){
+			for(ArenaPlayer ap : team.getLivingPlayers()){
+			        ap.getPlayer().setCompassTarget(loc);
+			}
+		}
 	}
 	@ArenaEventHandler
 	public void onPlace(BlockPlaceEvent e){
@@ -116,6 +140,7 @@ public class ArenaPlunger extends Arena {
 		    match.sendMessage(mmh.getMessage("ArenaPlunger.plunger_dropped").replace("%p", e.getPlayer().getName()).replace("%t", BattleArena.toArenaPlayer(e.getPlayer()).getTeam().getDisplayName()));
 		}
 	}
+  
 	@ArenaEventHandler
 	public void onDeath(final PlayerDeathEvent e){
 		if(e.getEntity().getInventory().contains(plungeritem)){

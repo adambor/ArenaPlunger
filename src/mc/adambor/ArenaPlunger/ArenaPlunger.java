@@ -35,6 +35,8 @@ public class ArenaPlunger extends Arena {
 	@Persist
         Location plungerloc;
 	Item plunger;
+	Material material;
+	Effect effect;
 	MatchMessageHandler mmh;
 	ItemStack plungeritem;
 	BukkitTask timerid1;
@@ -60,7 +62,7 @@ public class ArenaPlunger extends Arena {
 		objective.addEntry("Holding plunger:", -1);
 		holdingentry = objective.addEntry("-", -2);
 		
-		plungeritem = new ItemStack(Material.TORCH);
+		plungeritem = new ItemStack(material);
 		ItemMeta im = plungeritem.getItemMeta();
 		im.setDisplayName(ChatColor.GOLD+"Plunger");
 		plungeritem.setItemMeta(im);
@@ -88,7 +90,7 @@ public class ArenaPlunger extends Arena {
 	public void flames(Location location) {
 		for(int x=0;x<11;x++){
 			location = location.add(rand.nextDouble()-0.5, rand.nextDouble()-0.5, rand.nextDouble()-0.5);
-			location.getWorld().playEffect(location, Effect.NOTE, 10);
+			location.getWorld().playEffect(location, effect, 10)
 		}
 	}
 	public void onCancel(){
@@ -118,7 +120,7 @@ public class ArenaPlunger extends Arena {
 	}
 	@ArenaEventHandler
 	public void onPlace(BlockPlaceEvent e){
-		if(e.getBlock().getType().equals(Material.TORCH)) e.setCancelled(true);
+		if(e.getBlock().getType().equals(material)) e.setCancelled(true);
 	}
 	@ArenaEventHandler
 	public void onPickup(PlayerPickupItemEvent e){

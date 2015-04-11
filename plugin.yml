@@ -8,4 +8,4 @@ commands:
   ap:
     description: Arena Plunger
     aliases: [ap]
-    usage: /ap <setPlunger>
+    usage: /ap <setPlunger, setMaterial, setEffect>

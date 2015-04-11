@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import mc.alk.arena.BattleArena;
@@ -35,8 +36,9 @@ public class ArenaPlunger extends Arena {
 	@Persist
         Location plungerloc;
 	Item plunger;
-	Material material;
-	Effect effect;
+	static String material;
+	static String effect;
+	static Integer count;
 	MatchMessageHandler mmh;
 	ItemStack plungeritem;
 	BukkitTask timerid1;
@@ -62,46 +64,57 @@ public class ArenaPlunger extends Arena {
 		objective.addEntry("Holding plunger:", -1);
 		holdingentry = objective.addEntry("-", -2);
 		
-		plungeritem = new ItemStack(material);
+		plungeritem = new ItemStack(Material.valueOf(material));
 		ItemMeta im = plungeritem.getItemMeta();
 		im.setDisplayName(ChatColor.GOLD+"Plunger");
 		plungeritem.setItemMeta(im);
 		plunger = plungerloc.getWorld().dropItem(plungerloc, plungeritem);
 		plunger.setCustomName(ChatColor.GOLD+"Plunger");
 		plunger.setCustomNameVisible(true);
-		timerid1 = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable(){
+		timerid1 = new BukkitRunnable(){
 			@Override
 			public void run() {
 				if(plungerholding != null){
+					if(plungerholding.isOnline() == true){
 					objective.setPoints(entry.get(plungerholding.getTeam()),objective.getPoints(entry.get(plungerholding.getTeam()))+1);
 					flames(plungerholding.getLocation());
+					}
 				} else {
 					flames(plunger.getLocation());
 				}
 			}
-		}, 0, 20L);
-		timerid2 = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable(){
+		}.runTaskTimer(Main.plugin, 0, 20L);
+		timerid2 = new BukkitRunnable(){
 			@Override
 			public void run() {
-                                updateCompassLocation();
+                updateCompassLocation();
 			}
-		}, 0, 60L);
+		}.runTaskTimer(Main.plugin, 0, 20L);
 	}
 	public void flames(Location location) {
-		for(int x=0;x<11;x++){
-			location = location.add(rand.nextDouble()-0.5, rand.nextDouble()-0.5, rand.nextDouble()-0.5);
-			location.getWorld().playEffect(location, effect, 10)
+		for(int x=0;x<count;x++){
+			Location loc = location.clone();
+			loc = loc.add(rand.nextDouble()-0.5, 0, rand.nextDouble()-0.5);
+			location.getWorld().playEffect(loc, Effect.valueOf(effect), 10);
 		}
 	}
+	@Override
 	public void onCancel(){
 		timerid1.cancel();
 		timerid2.cancel();
-		plunger.remove();
+		removePlunger();
 	}
-	public void onVictory(){
+    @Override
+    public void onComplete() {
+        super.onComplete();
 		timerid1.cancel();
 		timerid2.cancel();
-		plunger.remove();
+		removePlunger();
+    }
+	public void removePlunger(){
+		if(plunger != null){
+			plunger.remove();
+		}
 	}
 	public void updateCompassLocation(){
 		Location loc = null;
@@ -118,9 +131,11 @@ public class ArenaPlunger extends Arena {
 			}
 		}
 	}
-	@ArenaEventHandler
+	@ArenaEventHandler(needsPlayer=false)
 	public void onPlace(BlockPlaceEvent e){
-		if(e.getBlock().getType().equals(material)) e.setCancelled(true);
+		if(e.getBlockPlaced().getType().equals(Material.valueOf(material))){
+			e.setCancelled(true);
+		}
 	}
 	@ArenaEventHandler
 	public void onPickup(PlayerPickupItemEvent e){

@@ -31,9 +31,11 @@ ArenaPlunger:
     onStart: ## Starting
         options: [teleportIn, pvpOn, blockBreakOff]
     onSpawn: ## what happens when a player spawns
-        options: [hunger=20, health=20]
+        options: [hunger=20, health=20, giveItems]
+        items:
+          - compass: 1 
     onDeath: ## what happens when a player dies
-        options: []
+        options: [respawn, clearInventory]
     onComplete: ## what happens when things end
         options: [teleportOut, pvpOn, blockBreakOn]
     victoryCondition: Custom
@@ -46,4 +48,3 @@ ArenaPlunger:
         options: [health=20, hunger=20, giveItems]
         items:
           - emerald: 1
-            

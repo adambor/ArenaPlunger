@@ -20,15 +20,16 @@ public class Main extends JavaPlugin {
 	public void onDisable(){
 		Log.info("[" + getName()+ "] v" + getDescription().getVersion()+ " stopping!");
 	}
-    @Override
-	public void loadConfig(){
-        FileConfiguration conf = getConfig();
-		ArenaPlunger.material = Material.valueOf(conf.getString("ArenaPlunger.plunger.material", "TORCH").toUpperCase());
-		ArenaPlunger.effect = Effect.valueOf(conf.getString("ArenaPlunger.plunger.effect", "NOTE"));
+    public void loadConfig(){
+		saveDefaultConfig();
+        FileConfiguration conf = plugin.getConfig();
+        ArenaPlunger.material = conf.getString("plunger.material", "TORCH").toUpperCase();
+		ArenaPlunger.effect = conf.getString("plunger.effect.type", "NOTE").toUpperCase();
+		ArenaPlunger.count = conf.getInt("plunger.effect.count", 10);
 	}
 	@Override
 	public void reloadConfig(){
+		super.reloadConfig();
 	    loadConfig();
-	.	super.reloadConfig();
 	}
 }

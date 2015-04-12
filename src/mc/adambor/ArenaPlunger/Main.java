@@ -30,6 +30,7 @@ public class Main extends JavaPlugin {
         ArenaPlunger.material = Material.valueOf(conf.getString("plunger.material", "TORCH").toUpperCase());
 		ArenaPlunger.effect = Effect.getByName(conf.getString("plunger.effect.type", "note"));
 		ArenaPlunger.maxdroppedtime = conf.getInt("plunger.timer", 30);
+		ArenaPlunger.pointsToWin = conf.getInt("scoreToWin", 100);
 		ArenaPlunger.count = conf.getInt("plunger.effect.count", 10);
 	}
 	@Override

@@ -53,6 +53,7 @@ public class ArenaPlunger extends Arena {
     BukkitTask plungertimer;
     SEntry holdingentry;
     Victory scores;
+    static Integer pointsToWin = 100;
     
 	public void onOpen(){
 		mmh = match.getMessageHandler();
@@ -81,7 +82,10 @@ public class ArenaPlunger extends Arena {
 			public void run() {
 				if(plungerholding != null){
 					if(plungerholding.isOnline() == true){
-					match.sendMessage(scores.addScore(plungerholding.getTeam(), plungerholding)+" score now");
+					if(scores.addScore(plungerholding.getTeam(), plungerholding) >= pointsToWin){
+						setWinner(plungerholding.getTeam());
+						onCancel();
+					}
 					flames(plungerholding.getPlayer().getEyeLocation().subtract(0, 0.5, 0));
 					}
 				} else {

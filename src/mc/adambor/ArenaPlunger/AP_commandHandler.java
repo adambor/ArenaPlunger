@@ -29,6 +29,13 @@ public class AP_commandHandler extends CustomCommandExecutor {
 		Main.plugin.reloadConfig();
 	    return sendMessage(sender, "&2Plunger timer set to: "+time);
 	}
+	@MCCommand(cmds={"setScoreToWin"}, admin=true)
+	public static boolean setScoreToWin(Player sender, Integer score){
+		Main.plugin.getConfig().set("scoreToWin", score);
+		Main.plugin.saveConfig();
+		Main.plugin.reloadConfig();
+	    return sendMessage(sender, "&2Score to win this game is now: "+score);
+	}
 	@MCCommand(cmds={"setEffect"}, admin=true)
 	public static boolean setEffect(Player sender, String effect, Integer count){
 		if(Effect.getByName(effect)!=null){

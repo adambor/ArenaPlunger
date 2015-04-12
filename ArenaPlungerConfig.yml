@@ -35,7 +35,7 @@ ArenaPlunger:
         items:
           - compass: 1 
     onDeath: ## what happens when a player dies
-        options: [respawn, clearInventory]
+        options: [clearInventory]
     onComplete: ## what happens when things end
         options: [teleportOut, pvpOn, blockBreakOn]
     victoryCondition: Custom

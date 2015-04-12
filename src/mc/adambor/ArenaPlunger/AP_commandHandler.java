@@ -22,16 +22,22 @@ public class AP_commandHandler extends CustomCommandExecutor {
 		Main.plugin.reloadConfig();
 	    return sendMessage(sender, "&2Plunger item set to: "+material);
 	}
+	@MCCommand(cmds={"setTimer"}, admin=true)
+	public static boolean setTimer(Player sender, Integer time){
+		Main.plugin.getConfig().set("plunger.timer", time);
+		Main.plugin.saveConfig();
+		Main.plugin.reloadConfig();
+	    return sendMessage(sender, "&2Plunger timer set to: "+time);
+	}
 	@MCCommand(cmds={"setEffect"}, admin=true)
 	public static boolean setEffect(Player sender, String effect, Integer count){
-		try{
-		    Effect.valueOf(effect);
+		if(Effect.getByName(effect)!=null){
 			Main.plugin.getConfig().set("plunger.effect.type", effect);
 			Main.plugin.getConfig().set("plunger.effect.count", count);
 			Main.plugin.saveConfig();
 			Main.plugin.reloadConfig();
 			return sendMessage(sender, "&2Plunger effect set to: "+effect+" and particles count to: "+count);
-		} catch (Exception e){
+		} else {
 			return sendMessage(sender, "&cThis effect doesn't exist");
 		}
 	}

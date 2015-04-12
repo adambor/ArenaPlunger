@@ -7,5 +7,6 @@ ArenaPlunger:
 
   plunger_picked: "&2Player %p has picked up the &6Plunger"
   plunger_broken: "&2Plunger is respawning because it is broken"
+  plunger_timer: "&2Plunger is respawning due to its dropped time"
   ### Use %p to replace with player name
   ### Use %t to replace with player team
